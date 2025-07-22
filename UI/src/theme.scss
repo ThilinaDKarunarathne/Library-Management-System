@@ -1,0 +1,6 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+
+$green: mat.m2-define-palette(mat.$m2-green-palette);
+$green-A200: map.get($green, A200);

@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 
+export interface NavigationItem {
+  value: string;
+  link: string;
+}
+
 @Component({
   selector: 'app-page-side-nav',
   standalone: false,
@@ -7,5 +12,14 @@ import { Component } from '@angular/core';
   styleUrl: './page-side-nav.scss'
 })
 export class PageSideNav {
+panelName: string = 'Student Panel';
+navItems: NavigationItem[] =[];
+
+constructor() {
+    this.navItems = [
+      { value: 'View Books', link: 'view-books' },
+      { value: 'My Orders', link: 'my-orders' }
+    ]
+  };
 
 }
