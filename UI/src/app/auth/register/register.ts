@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ApiService } from '../../_services/api-service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +14,7 @@ export class Register {
   hidePwdContent: boolean = true;
   registrerForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private service: ApiService, private snackBar: MatSnackBar) {
     this.registrerForm = fb.group({
       firstName: fb.control('', [Validators.required]),
       lastName: fb.control('', [Validators.required]),
@@ -26,15 +28,23 @@ export class Register {
   }
 
   onRegister() {
-    if (this.registrerForm.valid) {
-      const formData = this.registrerForm.value;
-      // Handle registration logic here, e.g., call a service to register the user
-      console.log('Registration data:', formData);
-    } else {
-      console.error('Form is invalid');
-    }
+  if (this.registrerForm.valid) {
+    const formData = { ...this.registrerForm.value }; // create a copy
+    delete formData.rpassword; // remove rpassword
 
-    this.registrerForm.reset();
+    this.service.register(formData).subscribe({
+      next: (data) => {
+        this.snackBar.open(data,"OK")
+        this.registrerForm.reset();
+      },
+      error: (error) => {
+        console.error('Error during registration:', error);
+      }
+    });
+  } else {
+    console.error('Form is invalid');
   }
+
+}
 
 }
